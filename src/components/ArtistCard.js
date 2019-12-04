@@ -21,7 +21,7 @@ const ArtistCard = props => {
           return (
             <div key={key}>
               <label>{`${key.replace(/_/g,' ')}:`}</label>
-              <h4>{typeof value === 'object' ? value.join(', ') : value}</h4>
+              <h5>{typeof value === 'object' ? value.join(', ') : value}</h5>
             </div>
           );
         })}

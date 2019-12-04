@@ -27,29 +27,43 @@ class Sidebar extends React.Component {
     });
 
     // Renders only if the list has changed
-    if(hasCheanged || (newGenresList.length === genresList.length))
+    if(hasCheanged || (newGenresList.length === genresList.length)){
       this.setState({ genresList: newGenresList });
+    }
+
+    const filterdGenres = Object.keys(newGenresList).filter(key => newGenresList[key]);
+    this.updateSelectedArtists(filterdGenres, nextProps.artists);
+  }
+
+  updateSelectedArtists = (genres, artists = null) => {
+    // filteredIsa will hold all id's ganres contained in the filteredGanres
+    let filteredIds = {};
+    if(genres.length) {
+      genres.forEach(selectedGenre => {
+        Object.values(this.props.artists).forEach(artist => {
+          if(artist.genres.find(artGenre => artGenre === selectedGenre)){
+            filteredIds[artist.id] = artist;
+          }
+        });
+      });
+    }
+    else {
+      filteredIds = artists || this.props.artists;
+    }
+    
+    this.props.updateList(filteredIds);
   }
 
   onClick = genre => {
     const { genresList } = this.state;
-    let filteredIds = {};
 
     const filterdGenres = Object.keys(genresList).filter(key => { 
       if(key === genre) return !genresList[key];
       return genresList[key];
     });  
 
-    // filteredIsa will hold all id's ganres contained in the filteredGanres
-    filterdGenres.forEach(selectedGenre => {
-      Object.values(this.props.artists).forEach(artist => {
-        if(artist.genres.find(artGenre => artGenre === selectedGenre)){
-          filteredIds[artist.id] = artist.id;
-        }
-      });
-    });
+    this.updateSelectedArtists(filterdGenres);
 
-    this.props.updateList(filteredIds);
     this.setState({ genresList: { ...genresList, [genre]: !genresList[genre] } })
   }
 

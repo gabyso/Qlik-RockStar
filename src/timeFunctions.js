@@ -15,4 +15,4 @@ export const getTime = (time = null) => {
   };
 };
 
-export const timeInterval = 60 * 1000;
+export const timeInterval = 20 * 1000;
