@@ -8,16 +8,16 @@ export const getArtistsList = () => async dispatch => {
       return obj;
     }, {});
     
-    let genres = {};
+    // let genres = {};
 
-    response.forEach(artist => {
-      artist.genres.forEach(genre => {
-        genres[genre] ? genres[genre].ids.push(artist.id) : genres[genre] = { ids: [artist.id], checked: false };
-      });
-    });
+    // response.forEach(artist => {
+    //   artist.genres.forEach(genre => {
+    //     genres[genre] ? genres[genre].ids.push(artist.id) : genres[genre] = { ids: [artist.id], checked: false };
+    //   });
+    // });
 
     dispatch({ type: 'ARTISTS_LIST', payload: artists});
-    dispatch({ type: 'GENRES_LIST', payload: genres});
+    // dispatch({ type: 'GENRES_LIST', payload: genres});
     dispatch({ type: 'ERROR', payload: null});
   }
   else dispatch({ type: 'ERROR', payload: response.error});
@@ -35,6 +35,6 @@ export const changeInput = input => {
   return { type: 'INPUT_SEARCH', payload: input };
 };
 
-export const updateLists = (selected, genre) => {
-  return { type: 'UPDATE_SELECTED', payload: { selected, genre } };
+export const updateList = (selected) => {
+  return { type: 'UPDATE_SELECTED', payload: selected };
 };

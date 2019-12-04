@@ -1,35 +1,63 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import SimpleBar from 'simplebar-react';
-import { getArtistsList, updateLists } from '../actions';
+import { getArtistsList, updateList } from '../actions';
 
 class Sidebar extends React.Component {
+  state = { genresList: {} };
+
   componentDidMount() {
     this.props.getArtistsList();
   }
 
-  onClick = genre => {
-    const { genresList } = this.props;
-    let filteredIds = {};
-    const filterdGenres = Object.keys(genresList).filter(key => { 
-      if(key === genre) return !genresList[key].checked;
-      return genresList[key].checked;
-    });  
-
-    filterdGenres.forEach(checkedGenre => {
-      this.props.genresList[checkedGenre].ids.forEach(id => {
-        filteredIds[id] = id;
+  componentWillReceiveProps(nextProps) { 
+    // Updates when the list of Artists is updated after API response
+    const { artists } = nextProps; 
+    const { genresList } = this.state;
+    let newGenresList = {};
+    let hasCheanged = false;
+    
+    Object.values(artists).forEach(artist => {
+      artist.genres.forEach(genre => {
+        if(!newGenresList[genre]) {
+          newGenresList[genre] = genresList[genre];
+          if(!genresList[genre]) hasCheanged = true;
+        }
       });
     });
-    
-    this.props.updateLists(filteredIds, genre);
+
+    // Renders only if the list has changed
+    if(hasCheanged || (newGenresList.length === genresList.length))
+      this.setState({ genresList: newGenresList });
+  }
+
+  onClick = genre => {
+    const { genresList } = this.state;
+    let filteredIds = {};
+
+    const filterdGenres = Object.keys(genresList).filter(key => { 
+      if(key === genre) return !genresList[key];
+      return genresList[key];
+    });  
+
+    // filteredIsa will hold all id's ganres contained in the filteredGanres
+    filterdGenres.forEach(selectedGenre => {
+      Object.values(this.props.artists).forEach(artist => {
+        if(artist.genres.find(artGenre => artGenre === selectedGenre)){
+          filteredIds[artist.id] = artist.id;
+        }
+      });
+    });
+
+    this.props.updateList(filteredIds);
+    this.setState({ genresList: { ...genresList, [genre]: !genresList[genre] } })
   }
 
   renderList = () => {
-    const genres = Object.keys(this.props.genresList);
+    const genres = Object.keys(this.state.genresList);
 
     return genres.map(genre => {
-      const isChecked = this.props.genresList[genre].checked;
+      const isChecked = this.state.genresList[genre] || false;
       return (
         <li key={genre} onClick={() => this.onClick(genre)}>
           <input type="checkbox" readOnly checked={isChecked}/>
@@ -53,8 +81,8 @@ class Sidebar extends React.Component {
   }
 };
 
-const mapStateToProps = ({ genresList }) => {
-  return { genresList }
+const mapStateToProps = ({ artists }) => {
+  return { artists }
 }
 
-export default connect(mapStateToProps, { getArtistsList, updateLists })(Sidebar);
+export default connect(mapStateToProps, { getArtistsList, updateList })(Sidebar);
