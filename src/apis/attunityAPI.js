@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const attunity = axios.create({
-  baseURL: 'http://localhost:3000'
+  baseURL: 'http://localhost:3001'
 });
 
 export const getArtists = async () => {

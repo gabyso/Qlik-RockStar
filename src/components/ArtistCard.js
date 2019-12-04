@@ -2,31 +2,30 @@ import React from 'react';
 import { getTime } from '../timeFunctions';
 
 const ArtistCard = props => {
-  const time = getTime(new Date(props.birth));
+  const artistKeys = ['name', 'date_of_birth', 'genres', 'greatest_hits'];
+  const artist = props.artist;
   
   return (
-    <div id="artist">
+    <div className="artist">
       <div>
-        <img src={props.photo} alt="artist"/>
+        <img src={props.artist.image_url} alt="artist"/>
       </div>
       <div className="artist-info">
-        <div>
-          <label>Name: </label>
-          <h4>{props.name}</h4>
-        </div>
-        <div>
-          <label>Date Of Birth: </label>
-          <h4>{`${time.month} ${time.date}, ${time.year}`}</h4>
-        </div>
-        <div>
-          <label>Geners List:</label>
-            <h4>{props.genres}, sssssss, sssssssssssssssssss, sssssss</h4>
-        </div>
+        {artistKeys.map(key =>{
+          let value = artist[key];
+          if(typeof value === 'object') value = value.join(', ');
+          else if(key === 'date_of_birth'){
+            const time = getTime(new Date(value));
+            value = `${time.month} ${time.date}, ${time.year}`;
+          }
+          return (
+            <div>
+              <label>{`${key.replace(/_/g,' ')}:`}</label>
+              <h4>{typeof value === 'object' ? value.join(', ') : value}</h4>
+            </div>
+          );
+        })}
       </div>
-      <div>
-        <label>Gratest Hits: </label>
-          {props.gratestHits.map(hit => <h4>{hit}</h4>)}
-        </div>
     </div>
   );
 };

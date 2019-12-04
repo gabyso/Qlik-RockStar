@@ -6,23 +6,19 @@
 
 body {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  overflow: hidden;
 }
 
 .text-heading {
   color:  #139052;
 }
 
-.search input {
-  width: 100%;
-  padding: 0.5rem;
-}
-
 #navbar {
   background: #333;
   color: #fff;
-  padding: 1rem;
+  padding: 1.5rem 3rem;
   display: flex;
-  height: 5rem;
+  height: 7rem;
   justify-content: space-between;
   align-items: center;
   position: sticky;
@@ -32,14 +28,16 @@ body {
   z-index: 1;
 }
 
-#navbar .search {
+#search {
+  width: 100%;
+  padding: 0.5rem;
   width: 30rem;
 }
 
 #content {
   display: flex;
-  width: 100vw;
-  height: calc(100vh - 5rem);
+  width: 100%;
+  height: calc(100vh - 7rem);
 }
 
 #sidebar {
@@ -60,6 +58,7 @@ body {
   border-bottom: #333 solid 1px;
   padding: 0 0.5rem;
   cursor: pointer;
+  text-transform: capitalize;
 }
 
 #sidebar ul li:hover {
@@ -93,21 +92,30 @@ body {
   margin-bottom: 1.5rem;
 }
 
-#artist {
+.artist {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
   background: rgb(206, 206, 206);
   border-radius: 5px;
   width: 70rem;
   padding: 2rem;
   margin-top: 2rem;
+  text-transform: capitalize;
 }
 
-#artist div {
-  max-width: 35rem;
+.artist div {
+  margin-right: 2rem;
 }
 
-#artist img {
+.artist label {
+  width: 10rem;
+}
+
+.artist div h4 {
+  display: inline-block;
+}
+
+.artist img {
   border-radius: 5px;
   width: 120px;
   height: 120px;

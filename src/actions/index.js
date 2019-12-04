@@ -10,13 +10,11 @@ export const getArtistsList = () => async dispatch => {
     
     let genres = {};
 
-    for(let i = 0; i < response.length; i++) {
-      const id = response[i].id;
-      for(let j = 0; j < response[i].genres.length; j++) {
-        const genre = response[i].genres[j];
-        genres[genre] ? genres[genre].push(id) : genres[genre] = [id];
-      }
-    }
+    response.forEach(artist => {
+      artist.genres.forEach(genre => {
+        genres[genre] ? genres[genre].ids.push(artist.id) : genres[genre] = { ids: [artist.id], checked: false };
+      });
+    });
 
     dispatch({ type: 'ARTISTS_LIST', payload: artists});
     dispatch({ type: 'GENRES_LIST', payload: genres});
@@ -25,14 +23,18 @@ export const getArtistsList = () => async dispatch => {
   else dispatch({ type: 'ERROR', payload: response.error});
 };
 
-export const updateList = artists => {
-  return { type: 'SELECT_ARTISTS', payload: artists };
+// export const updateList = artists => {
+//   return { type: 'SELECT_ARTISTS', payload: artists };
+// };
+
+// export const toggleGenre = genre => {
+//   return { type: 'TOGGLE_GENRE', payload: genre };
+// };
+
+export const changeInput = input => {
+  return { type: 'INPUT_SEARCH', payload: input };
 };
 
-export const toggleGenre = genre => {
-  return { type: 'TOGGLE_GENRE', payload: genre };
+export const updateLists = (selected, genre) => {
+  return { type: 'UPDATE_SELECTED', payload: { selected, genre } };
 };
-
-export const closeError = () => {
-  return { type: 'ERROR', payload: null};
-}

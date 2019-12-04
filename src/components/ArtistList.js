@@ -6,22 +6,24 @@ import { connect } from 'react-redux';
 class ArtistList extends React.Component {
 
   renderList = () => {
-    
-    const { selected, artists } = this.props;
-    const ids = Object.keys(selected);
+    const { selected, artists, inputSearch } = this.props;
+    let ids = [];
+
+    Object.keys(selected).forEach(id => {
+      const artist = artists[id];
+      const isIncluded = [artist.name, ...artist.greatest_hits].find(str => str.startsWith(inputSearch));
+
+      isIncluded && ids.push(id);
+    });
     
     return ids.map(id => {
       return <ArtistCard 
         key={id}
-        photo={artists[id].image_url}
-        name={artists[id].name}
-        birth={artists[id].date_of_birth}
-        genres={artists[id].genres.join(', ')}
-        gratestHits={artists[id].greatest_hits}
+        artist={artists[id]}
       />;
     });    
   }
-
+  
   render(){
     return (
       <div id="artist-list">
@@ -34,9 +36,10 @@ class ArtistList extends React.Component {
   }
 }
 
-const mapStateToProps = ({ selected, artists }) => {
+const mapStateToProps = ({ selected, inputSearch, artists }) => {
   return {
     selected,
+    inputSearch,
     artists
   };
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import SimpleBar from 'simplebar-react';
-import { getArtistsList, toggleGenre } from '../actions';
+import { getArtistsList, updateLists } from '../actions';
 
 class Sidebar extends React.Component {
   componentDidMount() {
@@ -9,14 +9,27 @@ class Sidebar extends React.Component {
   }
 
   onClick = genre => {
-    this.props.toggleGenre(genre);
+    const { genresList } = this.props;
+    let filteredIds = {};
+    const filterdGenres = Object.keys(genresList).filter(key => { 
+      if(key === genre) return !genresList[key].checked;
+      return genresList[key].checked;
+    });  
+
+    filterdGenres.forEach(checkedGenre => {
+      this.props.genresList[checkedGenre].ids.forEach(id => {
+        filteredIds[id] = id;
+      });
+    });
+    
+    this.props.updateLists(filteredIds, genre);
   }
 
   renderList = () => {
     const genres = Object.keys(this.props.genresList);
 
     return genres.map(genre => {
-      const isChecked = this.props.selectedGenres.includes(genre) ? true : false ;
+      const isChecked = this.props.genresList[genre].checked;
       return (
         <li key={genre} onClick={() => this.onClick(genre)}>
           <input type="checkbox" readOnly checked={isChecked}/>
@@ -40,8 +53,8 @@ class Sidebar extends React.Component {
   }
 };
 
-const mapStateToProps = ({ genresList, selectedGenres }) => {
-  return { genresList, selectedGenres }
+const mapStateToProps = ({ genresList }) => {
+  return { genresList }
 }
 
-export default connect(mapStateToProps, { getArtistsList, toggleGenre })(Sidebar);
+export default connect(mapStateToProps, { getArtistsList, updateLists })(Sidebar);

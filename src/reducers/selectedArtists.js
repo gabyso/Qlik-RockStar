@@ -1,7 +1,7 @@
 export default (state = {}, action) => {
   switch (action.type) {
-    case 'SELECT_ARTISTS':
-      return action.payload;
+    case 'UPDATE_SELECTED':
+      return action.payload.selected;
     default: 
       return state;
   }
