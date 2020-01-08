@@ -2,22 +2,13 @@ import React from 'react';
 import ArtistCard from './ArtistCard';
 import SimpleBarReact from 'simplebar-react';
 import { connect } from 'react-redux';
+import { getIds } from '../services/filter';
 
 class ArtistList extends React.Component {
 
   renderList = () => {
     const { selected, artists, inputSearch } = this.props;
-    let ids = [];
-    Object.keys(selected).forEach(id => {
-      const artist = artists[id];   
-      
-      if(artist) {
-        const isIncluded = [artist.name, ...artist.greatest_hits]
-          .find(str => str.toLowerCase().startsWith(inputSearch.toLowerCase()));
-          
-        isIncluded && ids.push(id);
-      }
-    });
+    let ids = getIds(selected, artists, inputSearch);
     
     return ids.map(id => {
       return <ArtistCard 
@@ -29,10 +20,12 @@ class ArtistList extends React.Component {
   
   render(){
     return (
-      <div id="artist-list">
+      <div id="artists">
         <h1>Artist List</h1>
         <SimpleBarReact style={{ maxHeight: 550 }}>
-          {this.renderList()}
+          <div className="artists-list">
+            {this.renderList()}
+          </div>
         </SimpleBarReact>
       </div>
     );

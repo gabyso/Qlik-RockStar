@@ -6,10 +6,6 @@ import { getArtistsList, updateList } from '../actions';
 class Sidebar extends React.Component {
   state = { genresList: {} };
 
-  componentDidMount() {
-    this.props.getArtistsList();
-  }
-
   componentWillReceiveProps(nextProps) { 
     // Updates when the list of Artists is updated after API response
     const { artists } = nextProps; 
@@ -19,20 +15,20 @@ class Sidebar extends React.Component {
     
     Object.values(artists).forEach(artist => {
       artist.genres.forEach(genre => {
-        if(!newGenresList[genre]) {
-          newGenresList[genre] = genresList[genre];
-          if(!genresList[genre]) hasCheanged = true;
+        if(newGenresList[genre] === undefined) {
+          newGenresList[genre] = genresList[genre] ? true : false;
+          if(genresList[genre] === undefined) hasCheanged = true;
         }
       });
     });
 
     // Renders only if the list has changed
-    if(hasCheanged || (newGenresList.length === genresList.length)){
+    if(hasCheanged || (Object.keys(newGenresList).length !== Object.keys(genresList).length)){
       this.setState({ genresList: newGenresList });
+      
+      const filterdGenres = Object.keys(newGenresList).filter(key => newGenresList[key]);
+      this.updateSelectedArtists(filterdGenres, nextProps.artists);
     }
-
-    const filterdGenres = Object.keys(newGenresList).filter(key => newGenresList[key]);
-    this.updateSelectedArtists(filterdGenres, nextProps.artists);
   }
 
   updateSelectedArtists = (genres, artists = null) => {
@@ -50,7 +46,6 @@ class Sidebar extends React.Component {
     else {
       filteredIds = artists || this.props.artists;
     }
-    
     this.props.updateList(filteredIds);
   }
 
@@ -63,7 +58,6 @@ class Sidebar extends React.Component {
     });  
 
     this.updateSelectedArtists(filterdGenres);
-
     this.setState({ genresList: { ...genresList, [genre]: !genresList[genre] } })
   }
 
@@ -71,7 +65,7 @@ class Sidebar extends React.Component {
     const genres = Object.keys(this.state.genresList);
 
     return genres.map(genre => {
-      const isChecked = this.state.genresList[genre] || false;
+      const isChecked = this.state.genresList[genre];
       return (
         <li key={genre} onClick={() => this.onClick(genre)}>
           <input type="checkbox" readOnly checked={isChecked}/>
@@ -85,11 +79,11 @@ class Sidebar extends React.Component {
     return (
       <nav id="sidebar">
         <h1>Genres</h1>
-        <ul>
-          <SimpleBar style={{ maxHeight: 600 }}>
-           {this.renderList()}
-          </SimpleBar>  
-        </ul>
+        <SimpleBar style={{ maxHeight: 550 }}>
+          <ul>
+            {this.renderList()}
+          </ul>
+        </SimpleBar>
       </nav>
     );
   }

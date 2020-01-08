@@ -1,5 +1,5 @@
 import React from 'react';
-import { getTime } from '../timeFunctions';
+import { getTime } from '../services/timeFunctions';
 
 const ArtistCard = props => {
   const artistKeys = ['name', 'date_of_birth', 'genres', 'greatest_hits'];

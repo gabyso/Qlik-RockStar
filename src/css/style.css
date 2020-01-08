@@ -31,11 +31,16 @@ body {
   z-index: 1;
 }
 
-
 #search {
-  width: 100%;
-  padding: 0.5rem;
+  padding: 0.25rem;
+  font-size: 1.3rem;
   width: 30rem;
+}
+
+#current-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #content {
@@ -46,15 +51,14 @@ body {
 
 #sidebar {
   background: #105f5c;
-  padding: 1rem;
+  padding: 0.5rem;
   flex: 1;
 }
 
 #sidebar ul {
   list-style: none;
   line-height: 2;
-  padding: 0 0.75rem;
-  margin-top: 1rem;
+  padding: 0 2rem;
 }
 
 #sidebar ul li {
@@ -74,24 +78,15 @@ body {
   margin-left: 2rem;
 }
 
-#current-time {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-#artist-list {
+#artists {
   flex: 4;
   height: 100%;
-  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  padding: 1.5rem 3rem;
+  padding: 1.5rem 0.2rem;
 }
 
-#artist-list h1 {
+#artists h1 {
   text-align: center;
   font-weight: bold;
   font-size: 3rem;
@@ -99,13 +94,21 @@ body {
   color: #333;
 }
 
+.artists-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: 5rem;
+}
+
 .artist {
   display: flex;
   justify-content: flex-start;
   background: rgb(206, 206, 206);
   border-radius: 5px;
-  width: 70rem;
-  padding: 2.5rem;
+  width: 55rem;
+  padding: 1rem;
   margin-top: 2rem;
   text-transform: capitalize;
 }
@@ -117,9 +120,9 @@ body {
 .artist div div{
   background: #333;
   color: #fff;
-  width: 50rem;
+  width: 40rem;
   border-radius: 5px;
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 0.75rem;
   margin-bottom: 2rem;
 }
 
@@ -129,14 +132,16 @@ body {
 
 .artist label {
   width: 10rem;
+  font-size: 1rem;
 }
 
 .artist h5 {
   display: inline-block;
+  font-size: 1.2rem;
 }
 
 .artist img {
   border-radius: 5px;
-  width: 200px;
-  height: 200px;
+  width: 120px;
+  height: 120px;
 }

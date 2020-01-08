@@ -2,10 +2,20 @@ import React from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import { connect } from 'react-redux';
+import { getArtistsList } from '../actions';
 import ArtistList from './ArtistList';
 import ErrorModal from './ErrorModal';
+import { apiInterval } from '../services/timeFunctions';
 
 class App extends React.Component {
+  componentDidMount() {
+    this.props.getArtistsList();
+    this.timer = setInterval(() => {console.log('ok');this.props.getArtistsList()}, apiInterval);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
 
   render() {
     const { errorMessage } = this.props;
@@ -28,4 +38,4 @@ const mapStateToProps = ({ errorMessage }) => {
   };
 };
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, { getArtistsList })(App);

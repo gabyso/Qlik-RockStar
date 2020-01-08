@@ -1,20 +1,19 @@
 import React from 'react';
-import { getTime, timeInterval } from '../timeFunctions';
+import { getTime, clockInterval } from '../services/timeFunctions';
 import { connect } from 'react-redux';
 import { getArtistsList } from '../actions';
 
 class Clock extends React.Component {
-  state = { time: null }
+  state = { time: getTime() }
 
   componentDidMount() {
-    this.setState({ time: getTime() })
+    this.timer = setInterval(() => {
+      this.setState({ time: getTime() }); 
+    }, clockInterval);
   }
 
-  componentDidUpdate() {
-    setTimeout(() => {
-      this.props.getArtistsList();
-      this.setState({ time: getTime() }); 
-    }, timeInterval);
+  componentWillUnmount() {
+    clearInterval(this.timer);
   }
 
   render() {
